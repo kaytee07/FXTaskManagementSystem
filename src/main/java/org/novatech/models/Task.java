@@ -10,6 +10,34 @@ public class Task {
     private Date due_date;
     private String status;
 
+    private void validateTitle(String title){
+        if (title == null || title.trim().isEmpty()) {
+            throw new IllegalArgumentException("Title cannot be null or empty");
+        }
+    }
+
+    private void validateDescription(String description){
+        if (description == null || description.trim().isEmpty()) {
+            throw new IllegalArgumentException("Description cannot be null or empty");
+        }
+    }
+
+    private void validateDate(Date due_date){
+        if (due_date == null) {
+            throw new IllegalArgumentException("Due date cannot be null or empty");
+        }
+    }
+
+    private void validateStatus(String status){
+        if (status == null || status.trim().isEmpty()) {
+            throw new IllegalArgumentException("Status cannot be null or empty");
+        }
+        if (!status.matches("(?i)pending|completed")) {
+            throw new IllegalArgumentException("Status must be 'pending', 'in progress', or 'completed'");
+        }
+    }
+
+
     public void setTask_id(int task_id) {
         this.task_id = task_id;
     }
@@ -27,6 +55,7 @@ public class Task {
     }
 
     public void setTitle(String title){
+        validateTitle(title);
         this.title = title;
     }
 
@@ -35,6 +64,7 @@ public class Task {
     }
 
     public void setDescription(String description) {
+        validateDescription(description);
         this.description = description;
     }
 
@@ -43,6 +73,7 @@ public class Task {
     }
 
     public void setDue_date(Date due_date) {
+        validateDate(due_date);
         this.due_date = due_date;
     }
 
@@ -51,6 +82,7 @@ public class Task {
     }
 
     public void setStatus(String status) {
+        validateStatus(status);
         this.status = status;
     }
 
