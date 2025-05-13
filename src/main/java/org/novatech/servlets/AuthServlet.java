@@ -5,10 +5,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.novatech.dao.UserDao;
+import org.novatech.models.User;
 
 import javax.imageio.IIOException;
 import java.io.IOException;
+import java.sql.SQLException;
 
 @WebServlet("/login")
 public class AuthServlet extends HttpServlet {
@@ -16,7 +19,7 @@ public class AuthServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/signin.jsp").forward(request, response);
+        request.getRequestDispatcher("/login.jsp").forward(request, response);
     }
 
     @Override
@@ -24,10 +27,17 @@ public class AuthServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         try {
-
+            User user = userDao.getUserByUsername(username);
+            if(user != null && userDao.checkPasswd(password, user.getPasswordHash())){
+                HttpSession session = request.getSession();
+                session.setAttribute("userId", user.getUser_id());
+                response.sendRedirect("/tasks");
+            } else {
+                request.setAttribute("error", "Invalid username and password");
+                request.getRequestDispatcher("/login.jsp").forward(request,response);
+            }
+        } catch (SQLException e){
+            throw new ServletException("DB error", e);
         }
-
-        if(username != null && userDao.checkPasswd(password, user.))
-
     }
 }
