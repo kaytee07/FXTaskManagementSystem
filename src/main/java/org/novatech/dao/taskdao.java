@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.Date
+import java.sql.Date;
 
 public class taskdao {
     public List<Task> getTasksByUserId(int userId, String status, String sort) throws SQLException {
@@ -74,7 +74,19 @@ public class taskdao {
             stmt.setString(3, task.getDescription());
             stmt.setDate(4, task.getDue_date());
             stmt.setString(5, task.getStatus());
+            stmt.executeUpdate();
+        }
+    }
 
+    public void updateTask(Task task) throws SQLException {
+        String sql = "UPDATE task SET title = ?, description = ? , due_date = ?, status = ?";
+        try(Connection conn = DatabaseConnect.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setString(1, task.getTitle());
+            stmt.setString(2, task.getDescription());
+            stmt.setDate(3, task.getDue_date());
+            stmt.setString(4, task.getStatus());
+            stmt.executeUpdate();
         }
     }
 
