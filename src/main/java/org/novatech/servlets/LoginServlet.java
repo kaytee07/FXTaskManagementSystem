@@ -27,8 +27,7 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
         try {
             User user = userDao.getUserByUsername(username);
-            if(user != null && userDao.checkPasswd(password, user)){
-                user.setPassword(password);
+            if(user != null && userDao.checkPasswd(password, user.getPasswordHash())){
                 HttpSession session = request.getSession();
                 session.setAttribute("userId", user.getUser_id());
                 response.sendRedirect("/tasks");

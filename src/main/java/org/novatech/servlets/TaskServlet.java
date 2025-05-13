@@ -4,7 +4,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 
 
-@WebServlet("/login")
+@WebServlet("/")
 public class TaskServlet {
 
 }
