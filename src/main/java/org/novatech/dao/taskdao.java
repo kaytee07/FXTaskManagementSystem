@@ -58,7 +58,7 @@ public class taskdao {
                     task.setDescription(rs.getString("description"));
                     task.setDue_date(rs.getDate("due_date"));
                     task.setStatus(rs.getString("status"));
-                    stmt.executeUpdate();
+                    return task;
                 }
             }
         }
@@ -86,6 +86,15 @@ public class taskdao {
             stmt.setString(2, task.getDescription());
             stmt.setDate(3, task.getDue_date());
             stmt.setString(4, task.getStatus());
+            stmt.executeUpdate();
+        }
+    }
+
+    public void deleteTask (int Id) throws SQLException {
+        String sql = "DELETE FROM task WHERE id = ?";
+        try (Connection conn = DatabaseConnect.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setInt(1, Id);
             stmt.executeUpdate();
         }
     }
