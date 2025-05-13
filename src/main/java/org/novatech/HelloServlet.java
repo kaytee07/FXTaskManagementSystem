@@ -11,5 +11,7 @@ public class HelloServlet extends HttpServlet {
         res.setContentType("text/html");
         PrintWriter out = res.getWriter();
         out.println("<h1>Hello from Servlet!</h1>");
+
+
     }
 }
