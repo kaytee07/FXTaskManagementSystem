@@ -11,7 +11,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class taskdao {
-
+    public List<Task> getTasksByUserId(int userId, String status, String sort) throws SQLException {
+        String sql = "SELECT * FROM tasks WHERE user_id = ?";
+        if (status != null && !status.isEmpty()) {
+            sql += " AND status = ?";
+        }
+        if (sort != null && sort.equals("due_date")) {
+            sql += " ORDER BY due_date";
+        }
+        try (Connection conn = DatabaseConnect.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            if (status != null && !status.isEmpty()) {
+                stmt.setString(2, status);
+            }
+            try (ResultSet rs = stmt.executeQuery()) {
+                List<Task> tasks = new ArrayList<>();
+                while (rs.next()) {
+                    Task task = new Task();
+                    task.setTask_id(rs.getInt("task_id"));
+                    task.setUser_id(rs.getInt("user_id"));
+                    task.setTitle(rs.getString("title"));
+                    task.setDescription(rs.getString("description"));
+                    task.setDue_date(rs.getDate("due_date"));
+                    task.setStatus(rs.getString("status"));
+                    tasks.add(task);
+                }
+                return tasks;
+            }
+        }
+    }
 
     public Task getTaskById(int Id) throws SQLException {
         String sql = "SELECT * FROM task WHERE title = ?";
