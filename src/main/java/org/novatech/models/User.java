@@ -13,11 +13,11 @@ public class User {
         return  user_id;
     }
 
-    public void setPassword(String password) {
+    public void setPasswordHash(String password) {
         this.password = password;
     }
 
-    public String getPassword() {
+    public String getPasswordHash() {
         return password;
     }
 

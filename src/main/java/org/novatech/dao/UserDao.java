@@ -28,19 +28,19 @@ public class UserDao {
         return  null;
     }
 
-    public void createUser(User user) throws SQLException {
+    public void createUser(String username, String password) throws SQLException {
         String sql = "INSERT INTO user (username, password) VALUES (?, ?)";
 
         try(Connection conn = DatabaseConnect.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)){
-            stmt.setString(1, user.getUsername());
-            stmt.setString(2, hashPassword(user));
+            stmt.setString(1, username);
+            stmt.setString(2, hashPassword(password));
             stmt.executeUpdate();
         }
     }
 
-    private String hashPassword(User user){
-        return  BCrypt.hashpw(user.getPasswordHash(), BCrypt.gensalt());
+    private String hashPassword(String password){
+        return  BCrypt.hashpw(password, BCrypt.gensalt());
     }
 
     public boolean checkPasswd(String password, String hash){
