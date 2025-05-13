@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.novatech.dao.UserDao;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 @WebServlet("/signup")
 public class  SignupServlet extends HttpServlet {
@@ -21,6 +22,12 @@ public class  SignupServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
+        try{
+            userDao.createUser(username, password);
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
+        } catch (SQLException e) {
+            throw new ServletException("DB error", e);
+        }
 
     }
 }
