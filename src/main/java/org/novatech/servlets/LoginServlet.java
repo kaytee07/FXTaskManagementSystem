@@ -9,12 +9,11 @@ import jakarta.servlet.http.HttpSession;
 import org.novatech.dao.UserDao;
 import org.novatech.models.User;
 
-import javax.imageio.IIOException;
 import java.io.IOException;
 import java.sql.SQLException;
 
 @WebServlet("/login")
-public class AuthServlet extends HttpServlet {
+public class LoginServlet extends HttpServlet {
     UserDao userDao = new UserDao();
 
     @Override
