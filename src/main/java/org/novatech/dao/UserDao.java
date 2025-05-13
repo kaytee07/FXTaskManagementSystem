@@ -20,12 +20,27 @@ public class UserDao {
                     User user = new User();
                     user.setUser_id(rs.getInt("user_id"));
                     user.setUsername(rs.getString("username"));
-                    user.setPassword(rs.getString("password"));
+                    user.setPasswordHash(rs.getString("password"));
                     return  user;
                 }
             }
         }
         return  null;
+    }
+
+    public void createUser(User user) throws SQLException {
+        String sql = "INSERT INTO user (username, password) VALUES (?, ?)";
+
+        try(Connection conn = DatabaseConnect.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setString(1, user.getUsername());
+            stmt.setString(2, hashPassword(user));
+            stmt.executeUpdate();
+        }
+    }
+
+    private String hashPassword(User user){
+        return  BCrypt.hashpw(user.getPasswordHash(), BCrypt.gensalt());
     }
 
     public boolean checkPasswd(String password, String hash){
