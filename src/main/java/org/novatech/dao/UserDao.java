@@ -20,7 +20,6 @@ public class UserDao {
                     User user = new User();
                     user.setUser_id(rs.getInt("user_id"));
                     user.setUsername(rs.getString("username"));
-                    user.setPasswordHash(rs.getString("password"));
                     return  user;
                 }
             }
@@ -43,7 +42,19 @@ public class UserDao {
         return  BCrypt.hashpw(password, BCrypt.gensalt());
     }
 
-    public boolean checkPasswd(String password, String hash){
-        return  BCrypt.checkpw(password, hash);
+    public boolean checkPasswd(String password, User user) throws SQLException {
+        String username = user.getUsername();
+        String hashedPasswd = "";
+        String sql = "SELECT * FROM users WHERE username = ?";
+        try(Connection conn = DatabaseConnect.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setString(1, username);
+            try (ResultSet rs = stmt.executeQuery()){
+                if(rs.next()){
+                    hashedPasswd = rs.getString("password");
+                }
+            }
+        }
+        return  BCrypt.checkpw(password, hashedPasswd);
     }
 }
