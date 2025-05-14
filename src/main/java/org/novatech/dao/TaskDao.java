@@ -9,11 +9,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.Date;
 
-public class taskdao {
+public class TaskDao {
     public List<Task> getTasksByUserId(int userId, String status, String sort) throws SQLException {
-        String sql = "SELECT * FROM tasks WHERE user_id = ?";
+        String sql = "SELECT * FROM task WHERE user_id = ?";
         if (status != null && !status.isEmpty()) {
             sql += " AND status = ?";
         }
@@ -44,8 +43,7 @@ public class taskdao {
     }
 
     public Task getTaskById(int Id) throws SQLException {
-        String sql = "SELECT * FROM task WHERE title = ?";
-
+        String sql = "SELECT * FROM task WHERE task_id = ?";
         try (Connection conn = DatabaseConnect.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)){
             stmt.setInt(1, Id);
@@ -79,19 +77,20 @@ public class taskdao {
     }
 
     public void updateTask(Task task) throws SQLException {
-        String sql = "UPDATE task SET title = ?, description = ? , due_date = ?, status = ?";
+        String sql = "UPDATE task SET title = ?, description = ?, due_date = ?, status = ? WHERE task_id = ?";
         try(Connection conn = DatabaseConnect.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)){
             stmt.setString(1, task.getTitle());
             stmt.setString(2, task.getDescription());
             stmt.setDate(3, task.getDue_date());
             stmt.setString(4, task.getStatus());
+            stmt.setInt(5, task.getTask_id());
             stmt.executeUpdate();
         }
     }
 
     public void deleteTask (int Id) throws SQLException {
-        String sql = "DELETE FROM task WHERE id = ?";
+        String sql = "DELETE FROM task WHERE task_id = ?";
         try (Connection conn = DatabaseConnect.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)){
             stmt.setInt(1, Id);

@@ -30,7 +30,7 @@ public class LoginServlet extends HttpServlet {
             if(user != null && userDao.checkPasswd(password, user.getPasswordHash())){
                 HttpSession session = request.getSession();
                 session.setAttribute("userId", user.getUser_id());
-                response.sendRedirect("/tasks");
+                response.sendRedirect("/FXTaskManagementSystem/tasks");
             } else {
                 request.setAttribute("error", "Invalid username and password");
                 request.getRequestDispatcher("/login.jsp").forward(request,response);

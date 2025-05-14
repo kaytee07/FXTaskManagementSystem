@@ -224,7 +224,7 @@
             <button type="submit" class="btn">Create Account</button>
 
             <div class="login-link">
-                Already have an account? <a href="login.jsp">Sign in</a>
+                Already have an account? <a href="/FXTaskManagementSystem/login">Sign in</a>
             </div>
         </form>
     </div>
