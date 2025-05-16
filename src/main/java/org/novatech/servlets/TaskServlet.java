@@ -34,7 +34,6 @@ public class TaskServlet extends HttpServlet {
             try {
                 List<Task> tasks = taskDAO.getTasksByUserId(userId, status, sort);
                 for (Task task : tasks) {
-                    System.out.println(task.getTitle());
                 }
                 request.setAttribute("tasks", tasks);
                 request.getRequestDispatcher("/tasks.jsp").forward(request, response);
@@ -53,7 +52,6 @@ public class TaskServlet extends HttpServlet {
                 int id = Integer.parseInt(path.substring(1, path.length() - 5));
                 try {
                     Task task = taskDAO.getTaskById(id);
-                    System.out.println(task);
                     if (task.getUser_id() != userId) {
                         response.sendError(HttpServletResponse.SC_FORBIDDEN);
                         return;

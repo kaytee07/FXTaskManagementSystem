@@ -31,7 +31,6 @@ public class  SignupServlet extends HttpServlet {
         }
 
         if(!password.equals(confirmPassword)){
-            System.out.println(password + " " + confirmPassword);
             request.setAttribute("error", "Passwords do not much");
             request.getRequestDispatcher("/signup.jsp").forward(request, response);
         }
