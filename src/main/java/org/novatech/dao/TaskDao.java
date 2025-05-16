@@ -2,12 +2,14 @@ package org.novatech.dao;
 
 import org.novatech.models.Task;
 import org.novatech.utils.DatabaseConnect;
+import org.novatech.utils.TaskComparator;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class TaskDao {
@@ -36,6 +38,11 @@ public class TaskDao {
                     task.setDue_date(rs.getDate("due_date"));
                     task.setStatus(rs.getString("status"));
                     tasks.add(task);
+                }
+
+                Comparator<Task> comparator = TaskComparator.getComparator(sort);
+                if (comparator != null) {
+                    tasks.sort(comparator);
                 }
                 return tasks;
             }

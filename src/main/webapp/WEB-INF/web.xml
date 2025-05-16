@@ -19,14 +19,14 @@
 <!--    <servlet-name>SignupServlet</servlet-name>-->
 <!--    <url-pattern>/signup</url-pattern>-->
 <!--  </servlet-mapping>-->
-  <servlet>
-    <servlet-name>TaskServlet</servlet-name>
-    <servlet-class>com.novatech.servlet.TaskServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>TaskServlet</servlet-name>
-    <url-pattern>/tasks/*</url-pattern>
-  </servlet-mapping>
+<!--  <servlet>-->
+<!--    <servlet-name>TaskServlet</servlet-name>-->
+<!--    <servlet-class>com.novatech.servlet.TaskServlet</servlet-class>-->
+<!--  </servlet>-->
+<!--  <servlet-mapping>-->
+<!--    <servlet-name>TaskServlet</servlet-name>-->
+<!--    <url-pattern>/tasks/*</url-pattern>-->
+<!--  </servlet-mapping>-->
   <session-config>
     <session-timeout>30</session-timeout>
   </session-config>

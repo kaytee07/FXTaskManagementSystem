@@ -15,6 +15,12 @@
             --pending-color: #f39c12;
             --completed-color: #2ecc71;
             --overdue-color: #e74c3c;
+            --error-color: #721c24;
+            --error-bg: #f8d7da;
+            --success-color: #155724;
+            --success-bg: #d4edda;
+            --warning-color: #856404;
+            --warning-bg: #fff3cd;
         }
 
         * {
@@ -29,6 +35,63 @@
             min-height: 100vh;
         }
 
+        /* Message Styles */
+        .message-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .message {
+            max-width: 1200px;
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideIn 0.5s forwards;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .message.error {
+            background-color: var(--error-bg);
+            color: var(--error-color);
+            border-left: 5px solid var(--error-color);
+        }
+
+        .message.success {
+            background-color: var(--success-bg);
+            color: var(--success-color);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .message.warning {
+            background-color: var(--warning-bg);
+            color: var(--warning-color);
+            border-left: 5px solid var(--warning-color);
+        }
+
+        .message-close {
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-left: 15px;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Header Styles */
         .header {
             background: white;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -36,6 +99,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 900;
         }
 
         .novatech-logo {
@@ -83,6 +149,7 @@
             color: white;
         }
 
+        /* Main Content Styles */
         .container {
             max-width: 1200px;
             margin: 30px auto;
@@ -127,6 +194,7 @@
             background: #e65c00;
         }
 
+        /* Filter Styles */
         .filters {
             display: flex;
             gap: 15px;
@@ -152,6 +220,7 @@
             background: white;
         }
 
+        /* Task Grid Styles */
         .task-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -256,6 +325,7 @@
             color: white;
         }
 
+        /* Empty State Styles */
         .empty-state {
             text-align: center;
             padding: 50px 20px;
@@ -267,6 +337,7 @@
             margin-bottom: 20px;
         }
 
+        /* Responsive Styles */
         @media (max-width: 768px) {
             .header {
                 flex-direction: column;
@@ -285,6 +356,34 @@
     </style>
 </head>
 <body>
+    <!-- Message Display Area -->
+    <div class="message-container">
+        <c:if test="${not empty errorMessage}">
+            <div class="message error">
+                ${errorMessage}
+                <span class="message-close" onclick="this.parentElement.remove()">&times;</span>
+            </div>
+        </c:if>
+        <c:if test="${not empty successMessage}">
+            <div class="message success">
+                ${successMessage}
+                <span class="message-close" onclick="this.parentElement.remove()">&times;</span>
+            </div>
+        </c:if>
+        <c:if test="${not empty param.error}">
+            <div class="message error">
+                ${param.error}
+                <span class="message-close" onclick="this.parentElement.remove()">&times;</span>
+            </div>
+        </c:if>
+        <c:if test="${not empty param.success}">
+            <div class="message success">
+                ${param.success}
+                <span class="message-close" onclick="this.parentElement.remove()">&times;</span>
+            </div>
+        </c:if>
+    </div>
+
     <header class="header">
         <div class="novatech-logo">
             <h1>Nova<span>tech</span></h1>
@@ -342,9 +441,14 @@
                                    onclick="if(confirm('Are you sure you want to delete this task?')) {
                                        fetch('/FXTaskManagementSystem/tasks/${task.task_id}/delete', {
                                            method: 'POST'
-                                       }).then(() => window.location.reload());
+                                       }).then(response => {
+                                           if (response.ok) {
+                                               window.location.href = '/FXTaskManagementSystem/tasks?success=Task+deleted+successfully';
+                                           } else {
+                                               window.location.href = '/FXTaskManagementSystem/tasks?error=Unable+to+delete+task';
+                                           }
+                                       });
                                    }; return false;">Delete</a>
-
                             </div>
                         </div>
                     </c:forEach>
@@ -384,6 +488,17 @@
 
             window.location.href = url;
         }
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const messages = document.querySelectorAll('.message');
+            messages.forEach(message => {
+                setTimeout(() => {
+                    message.style.opacity = '0';
+                    setTimeout(() => message.remove(), 500);
+                }, 5000);
+            });
+        });
     </script>
 </body>
 </html>

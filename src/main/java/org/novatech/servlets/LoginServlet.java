@@ -12,7 +12,7 @@ import org.novatech.models.User;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@WebServlet("/login")
+@WebServlet("/")
 public class LoginServlet extends HttpServlet {
     UserDao userDao = new UserDao();
 
